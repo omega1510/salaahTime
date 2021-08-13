@@ -2,30 +2,24 @@
 
 # assumes a unix-like system, e.g. GNU/linux, macOS, BSD
 
+
 import os
+from format import colors
 
-output = os.popen(
-    "curl -s https://saba-igc.org | grep Imsaak | grep -o '[0-9]\:[0-5][0-9]'"
-).read()
+if os.name == "posix":
+    output = os.popen(
+        "curl -s https://saba-igc.org | grep Imsaak | grep -o '[1-9]\:[0-5][0-9]\|1[0-2]\:[0-5][0-9] [a-z][a-z]'"
+    ).read()
 
-output = str(output).splitlines()
+    output = str(output).splitlines()
 
-loop = 0
+    loop = 0
 
-for time in output:
-    if loop == 0:
-        print("Imsaak: %s am" % time)
-    if loop == 1:
-        print("Fajr: %s am" % time)
-    if loop == 2:
-        print("Sunrise: %s am" % time)
-    if loop == 3:
-        print("Zuhr: %s pm" % time)
-    if loop == 4:
-        print("Sunset: %s pm" % time)
-    if loop == 5:
-        print("Maghrib: %s pm" % time)
-    if loop == 6:
-        print("Midnight: %s am" % time)
+    labels = ["Imsaak", "Fajr", "Sunrise", "Zuhr", "Sunset", "Maghrib", "Midnight"]
 
-    loop += 1
+    for time in output:
+        print(colors.bold + colors.fg.green + labels[loop] + ": " + colors.reset + time)
+
+        loop += 1
+else:
+    print("Incompatible operating system! Only posix systems are supported :(")
