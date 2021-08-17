@@ -8,7 +8,7 @@ from format import colors
 
 if os.name == "posix":
     output = os.popen(
-        "curl -s https://saba-igc.org | grep Imsaak | grep -o '[1-9]\:[0-5][0-9]\|1[0-2]\:[0-5][0-9] [a-z][a-z]'"
+        "curl -s https://saba-igc.org | grep Imsaak | grep -o '\([1-9]\:[0-5][0-9]\|1[0-2]\:[0-5][0-9]\) [a-z][a-z]'"
     ).read()
 
     output = str(output).splitlines()
@@ -16,6 +16,13 @@ if os.name == "posix":
     loop = 0
 
     labels = ["Imsaak", "Fajr", "Sunrise", "Zuhr", "Sunset", "Maghrib", "Midnight"]
+
+    print(
+        colors.bold
+        + colors.underline
+        + "Here are the prayer times for the San Francisco Bay Area:\n"
+        + colors.reset
+    )
 
     for time in output:
         print(colors.bold + colors.fg.green + labels[loop] + ": " + colors.reset + time)
